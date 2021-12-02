@@ -2,11 +2,11 @@ import connection from '../database/database.js';
 
 const insertSong = async ({ name, youtubeLink, score }) => {
   const result = await connection.query(
-    'INSERT INTO song (name, link, score) VALUES ($1, $2, $3)',
+    'INSERT INTO song (name, link, score) VALUES ($1, $2, $3) RETURNING *',
     [name, youtubeLink, score],
   );
 
-  return result.rowCount;
+  return result.rowCount[0];
 };
 
 const findSongByName = async ({ name }) => {
@@ -14,7 +14,7 @@ const findSongByName = async ({ name }) => {
     name,
   ]);
 
-  return result.rows[0];
+  return result.rowCount;
 };
 
 const findSongByLink = async ({ youtubeLink }) => {
@@ -22,7 +22,7 @@ const findSongByLink = async ({ youtubeLink }) => {
     youtubeLink,
   ]);
 
-  return result.rows[0];
+  return result.rowCount;
 };
 
 export { insertSong, findSongByName, findSongByLink };
