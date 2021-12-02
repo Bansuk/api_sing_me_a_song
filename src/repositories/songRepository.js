@@ -17,4 +17,12 @@ const findSongByName = async ({ name }) => {
   return result.rows[0];
 };
 
-export { insertSong, findSongByName };
+const findSongByLink = async ({ youtubeLink }) => {
+  const result = await connection.query('SELECT * FROM song WHERE name = $1', [
+    youtubeLink,
+  ]);
+
+  return result.rows[0];
+};
+
+export { insertSong, findSongByName, findSongByLink };
