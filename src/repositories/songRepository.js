@@ -9,4 +9,12 @@ const insertSong = async ({ name, youtubeLink, score }) => {
   return result.rowCount;
 };
 
-export { insertSong };
+const findSongByName = async ({ name }) => {
+  const result = await connection.query('SELECT * FROM song WHERE name = $1', [
+    name,
+  ]);
+
+  return result.rows[0];
+};
+
+export { insertSong, findSongByName };
