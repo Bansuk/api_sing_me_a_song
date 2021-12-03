@@ -18,7 +18,7 @@ const findSongByName = async ({ name }) => {
 };
 
 const findSongByLink = async ({ youtubeLink }) => {
-  const result = await connection.query('SELECT * FROM song WHERE name = $1', [
+  const result = await connection.query('SELECT * FROM song WHERE link = $1', [
     youtubeLink,
   ]);
 
