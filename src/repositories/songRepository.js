@@ -42,6 +42,15 @@ const updateSong = async ({ id, newScore }) => {
   return result.rows[0];
 };
 
+const deleteSong = async ({ id }) => {
+  const result = await connection.query(
+    'DELETE FROM song WHERE id = $1',
+    [id],
+  );
+
+  return result.rows[0];
+};
+
 export {
-  insertSong, findSongByName, findSongByLink, findSongById, updateSong,
+  insertSong, findSongByName, findSongByLink, findSongById, updateSong, deleteSong,
 };

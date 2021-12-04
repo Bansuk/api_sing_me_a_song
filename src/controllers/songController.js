@@ -18,10 +18,10 @@ const newSong = async (req, res, next) => {
 
 const newVote = async (req, res, next) => {
   const { id } = req.params;
-  const { voteType } = req.path.slice(req.path.lastIndexOf('/') + 1);
+  const voteType = req.path.slice(req.path.lastIndexOf('/') + 1);
 
   try {
-    const updatedSong = await songService.upvoteASong({ id, voteType });
+    const updatedSong = await songService.voteForSong({ id, voteType });
     return res.status(200).send(updatedSong);
   } catch (error) {
     if (error instanceof SongError) return res.status(404).send(error.message);
