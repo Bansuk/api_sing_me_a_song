@@ -8,12 +8,24 @@ describe('Song Service', () => {
       .spyOn(songRepository, 'findSongByName')
       .mockImplementationOnce(() => 1);
 
-    const name = 'test';
-    const promise = songService.createSong({ name });
+    const promise = songService.createSong({ name: 'test' });
     await expect(promise).rejects.toThrowError(SongError);
   });
 
-  test('Should return new song for valid name', async () => {
+  test('Should throw a SongError when link is already in use', async () => {
+    jest
+      .spyOn(songRepository, 'findSongByName')
+      .mockImplementationOnce(() => 0);
+
+    jest
+      .spyOn(songRepository, 'findSongByLink')
+      .mockImplementationOnce(() => 1);
+
+    const promise = songService.createSong({ youtubeLink: 'test' });
+    await expect(promise).rejects.toThrowError(SongError);
+  });
+
+  test('Should return new song for valid name and valid link', async () => {
     jest
       .spyOn(songRepository, 'findSongByName')
       .mockImplementationOnce(() => 0);
@@ -37,19 +49,5 @@ describe('Song Service', () => {
     });
 
     expect(result.length).toBe(1);
-  });
-
-  test('Should throw a SongError when link is already in use', async () => {
-    jest
-      .spyOn(songRepository, 'findSongByName')
-      .mockImplementationOnce(() => 0);
-
-    jest
-      .spyOn(songRepository, 'findSongByLink')
-      .mockImplementationOnce(() => 1);
-
-    const youtubeLink = 'test';
-    const promise = songService.createSong({ youtubeLink });
-    await expect(promise).rejects.toThrowError(SongError);
   });
 });
