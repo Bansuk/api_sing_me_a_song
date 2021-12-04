@@ -16,11 +16,12 @@ const newSong = async (req, res, next) => {
   }
 };
 
-const newUpVote = async (req, res, next) => {
+const newVote = async (req, res, next) => {
   const { id } = req.params;
+  const { voteType } = req.path.slice(req.path.lastIndexOf('/') + 1);
 
   try {
-    const updatedSong = await songService.upvoteASong({ id });
+    const updatedSong = await songService.upvoteASong({ id, voteType });
     return res.status(200).send(updatedSong);
   } catch (error) {
     if (error instanceof SongError) return res.status(404).send(error.message);
@@ -28,4 +29,4 @@ const newUpVote = async (req, res, next) => {
   }
 };
 
-export { newSong, newUpVote };
+export { newSong, newVote };
