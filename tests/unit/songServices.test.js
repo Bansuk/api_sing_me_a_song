@@ -56,7 +56,7 @@ describe('Song Service', () => {
       .spyOn(songRepository, 'findSongById')
       .mockImplementationOnce(() => undefined);
 
-    const promise = songService.upvoteASong({ id: 9999 });
+    const promise = songService.voteForSong({ id: 9999 });
     await expect(promise).rejects.toThrowError(SongError);
   });
 
@@ -79,11 +79,88 @@ describe('Song Service', () => {
       },
     ]);
 
-    const result = await songService.upvoteASong({
+    const result = await songService.voteForSong({
       id: 1,
+      voteType: 'upvote',
     });
 
     expect(result.length).toBe(1);
     expect(result[0].score).toBe(1);
+  });
+
+  test('Should return nothing when song is downvoted below -5', async () => {
+    jest.spyOn(songRepository, 'findSongById').mockImplementationOnce(() => [
+      {
+        id: 1,
+        name: 'test',
+        youtubeLink: 'test',
+        score: -5,
+      },
+    ]);
+
+    jest.spyOn(songRepository, 'deleteSong').mockImplementationOnce(() => []);
+
+    const result = await songService.voteForSong({
+      id: 1,
+      voteType: 'downvote',
+    });
+
+    expect(result.length).toBe(0);
+  });
+
+  test('Should return a song with a score of -5', async () => {
+    jest.spyOn(songRepository, 'findSongById').mockImplementationOnce(() => [
+      {
+        id: 1,
+        name: 'test',
+        youtubeLink: 'test',
+        score: -4,
+      },
+    ]);
+
+    jest.spyOn(songRepository, 'updateSong').mockImplementationOnce(() => [
+      {
+        id: 1,
+        name: 'test',
+        youtubeLink: 'test',
+        score: -5,
+      },
+    ]);
+
+    const result = await songService.voteForSong({
+      id: 1,
+      voteType: 'downvote',
+    });
+
+    expect(result.length).toBe(1);
+    expect(result[0].score).toBe(-5);
+  });
+
+  test('Should return a song with a score of -4', async () => {
+    jest.spyOn(songRepository, 'findSongById').mockImplementationOnce(() => [
+      {
+        id: 1,
+        name: 'test',
+        youtubeLink: 'test',
+        score: -3,
+      },
+    ]);
+
+    jest.spyOn(songRepository, 'updateSong').mockImplementationOnce(() => [
+      {
+        id: 1,
+        name: 'test',
+        youtubeLink: 'test',
+        score: -4,
+      },
+    ]);
+
+    const result = await songService.voteForSong({
+      id: 1,
+      voteType: 'downvote',
+    });
+
+    expect(result.length).toBe(1);
+    expect(result[0].score).toBe(-4);
   });
 });
