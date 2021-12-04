@@ -6,7 +6,7 @@ const insertSong = async ({ name, youtubeLink, score }) => {
     [name, youtubeLink, score],
   );
 
-  return result.rowCount[0];
+  return result.rows[0];
 };
 
 const findSongByName = async ({ name }) => {

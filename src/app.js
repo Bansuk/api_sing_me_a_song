@@ -12,3 +12,5 @@ app.use(cors());
 app.use(recommendationRouter);
 
 app.use(serverMiddlewareError);
+
+export default app;

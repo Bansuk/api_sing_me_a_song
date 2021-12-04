@@ -1,6 +1,6 @@
 import * as songService from '../services/songServices.js';
 import { isSongInputValid } from '../validations/songValidation.js';
-import SongError from '../errors/SongError';
+import SongError from '../errors/SongError.js';
 
 const newSong = async (req, res, next) => {
   if (!isSongInputValid(req.body)) return res.sendStatus(400);

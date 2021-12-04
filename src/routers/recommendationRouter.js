@@ -1,6 +1,6 @@
 import { Router } from 'express';
 
-import * as songController from '../controllers/songController';
+import * as songController from '../controllers/songController.js';
 
 const router = new Router();
 
