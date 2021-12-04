@@ -1,4 +1,4 @@
-import * as songService from '../../src/services/songServices.js';
+import * as songService from '../../src/services/songService.js';
 import * as songRepository from '../../src/repositories/songRepository.js';
 import SongError from '../../src/errors/SongError.js';
 
@@ -49,5 +49,14 @@ describe('Song Service', () => {
     });
 
     expect(result.length).toBe(1);
+  });
+
+  test('Should throw a SongError when id is from a song that does not exist', async () => {
+    jest
+      .spyOn(songRepository, 'findSongById')
+      .mockImplementationOnce(() => undefined);
+
+    const promise = songService.upvoteASong({ id: 9999 });
+    await expect(promise).rejects.toThrowError(SongError);
   });
 });
