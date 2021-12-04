@@ -59,4 +59,31 @@ describe('Song Service', () => {
     const promise = songService.upvoteASong({ id: 9999 });
     await expect(promise).rejects.toThrowError(SongError);
   });
+
+  test('Should return the song from id with score increased by 1', async () => {
+    jest.spyOn(songRepository, 'findSongById').mockImplementationOnce(() => [
+      {
+        id: 1,
+        name: 'test',
+        youtubeLink: 'test',
+        score: 0,
+      },
+    ]);
+
+    jest.spyOn(songRepository, 'updateSong').mockImplementationOnce(() => [
+      {
+        id: 1,
+        name: 'test',
+        youtubeLink: 'test',
+        score: 1,
+      },
+    ]);
+
+    const result = await songService.upvoteASong({
+      id: 1,
+    });
+
+    expect(result.length).toBe(1);
+    expect(result[0].score).toBe(1);
+  });
 });
