@@ -24,9 +24,9 @@ const voteForSong = async ({ id, voteType }) => {
 
   let newScore;
 
-  if (voteType === 'upvote') newScore = song.score + 1;
+  if (voteType === 'upvote') newScore = song[0].score + 1;
   else if (voteType === 'downvote') {
-    newScore = song.score - 1;
+    newScore = song[0].score - 1;
   }
 
   let updatedSong;
