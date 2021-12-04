@@ -17,16 +17,24 @@ const createSong = async ({ name, youtubeLink }) => {
   return newSong;
 };
 
-const upvoteASong = async ({ id }) => {
+const voteForSong = async ({ id, voteType }) => {
   const song = await songRepository.findSongById({ id });
 
   if (!song) throw new SongError('This song does not exist.');
 
-  const newScore = song.score + 1;
+  let newScore;
 
-  const updatedSong = await songRepository.updateSong({ id, newScore });
+  if (voteType === 'upvote') newScore = song.score + 1;
+  else if (voteType === 'downvote') {
+    newScore = song.score - 1;
+  }
+
+  let updatedSong;
+
+  if (newScore >= -5) updatedSong = await songRepository.updateSong({ id, newScore });
+  else updatedSong = await songRepository.deleteSong({ id });
 
   return updatedSong;
 };
 
-export { createSong, upvoteASong };
+export { createSong, voteForSong };
