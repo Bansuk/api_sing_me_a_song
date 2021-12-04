@@ -13,6 +13,32 @@ describe('Song Service', () => {
     await expect(promise).rejects.toThrowError(SongError);
   });
 
+  test('Should return new song for valid name', async () => {
+    jest
+      .spyOn(songRepository, 'findSongByName')
+      .mockImplementationOnce(() => 0);
+
+    jest
+      .spyOn(songRepository, 'findSongByLink')
+      .mockImplementationOnce(() => 0);
+
+    jest.spyOn(songRepository, 'insertSong').mockImplementationOnce(() => [
+      {
+        id: 1,
+        name: 'test',
+        youtubeLink: 'test',
+        score: 0,
+      },
+    ]);
+
+    const result = await songService.createSong({
+      name: 'test',
+      youtubeLink: 'test',
+    });
+
+    expect(result.length).toBe(1);
+  });
+
   test('Should throw a SongError when link is already in use', async () => {
     jest
       .spyOn(songRepository, 'findSongByName')
