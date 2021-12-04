@@ -1,4 +1,4 @@
-import * as songService from '../services/songServices.js';
+import * as songService from '../services/songService.js';
 import { isSongInputValid } from '../validations/songValidation.js';
 import SongError from '../errors/SongError.js';
 
@@ -16,4 +16,16 @@ const newSong = async (req, res, next) => {
   }
 };
 
-export { newSong };
+const newUpVote = async (req, res, next) => {
+  const { id } = req.params;
+
+  try {
+    const updatedSong = await songService.upvoteASong({ id });
+    return res.status(200).send(updatedSong);
+  } catch (error) {
+    if (error instanceof SongError) return res.status(404).send(error.message);
+    next(error);
+  }
+};
+
+export { newSong, newUpVote };
