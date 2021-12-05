@@ -29,4 +29,16 @@ const newVote = async (req, res, next) => {
   }
 };
 
-export { newSong, newVote };
+const getTopSongs = async (req, res, next) => {
+  const { amount } = req.params;
+
+  try {
+    const topSongs = await songService.topSongs({ amount });
+    return res.status(200).send(topSongs);
+  } catch (error) {
+    if (error instanceof SongError) return res.status(404).send(error.message);
+    next(error);
+  }
+};
+
+export { newSong, newVote, getTopSongs };
