@@ -40,6 +40,8 @@ const voteForSong = async ({ id, voteType }) => {
 const topSongs = async ({ amount }) => {
   const songs = await songRepository.selectTopSongs({ amount });
 
+  if (!songs.length) throw new SongError('There are no songs available.');
+
   return songs;
 };
 
