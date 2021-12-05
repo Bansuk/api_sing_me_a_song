@@ -161,4 +161,13 @@ describe('Song Service', () => {
       score: -4,
     });
   });
+
+  test('Should throw a SongError when there are no songs available', async () => {
+    jest
+      .spyOn(songRepository, 'selectTopSongs')
+      .mockImplementationOnce(() => []);
+
+    const promise = songService.topSongs({ amount: 100 });
+    await expect(promise).rejects.toThrowError(SongError);
+  });
 });
