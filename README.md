@@ -38,7 +38,7 @@ $ npm i
 ```
 
 
-**3. Run the apllication**
+**3. Run the application**
 
 
 ```
