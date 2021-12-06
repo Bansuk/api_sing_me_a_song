@@ -61,106 +61,104 @@ describe('Song Service', () => {
   });
 
   test('Should return the song from id with score increased by 1', async () => {
-    jest.spyOn(songRepository, 'findSongById').mockImplementationOnce(() => [
-      {
-        id: 1,
-        name: 'test',
-        youtubeLink: 'test',
-        score: 0,
-      },
-    ]);
+    jest.spyOn(songRepository, 'findSongById').mockImplementationOnce(() => ({
+      id: 1,
+      name: 'test',
+      youtubeLink: 'test',
+      score: 0,
+    }));
 
-    jest.spyOn(songRepository, 'updateSong').mockImplementationOnce(() => [
-      {
-        id: 1,
-        name: 'test',
-        youtubeLink: 'test',
-        score: 1,
-      },
-    ]);
+    jest.spyOn(songRepository, 'updateSong').mockImplementationOnce(() => ({
+      id: 1,
+      name: 'test',
+      youtubeLink: 'test',
+      score: 1,
+    }));
 
     const result = await songService.voteForSong({
       id: 1,
       voteType: 'upvote',
     });
 
-    expect(result.length).toBe(1);
-    expect(result[0].score).toBe(1);
+    expect(result).toEqual({
+      id: 1,
+      name: 'test',
+      youtubeLink: 'test',
+      score: 1,
+    });
   });
 
   test('Should return nothing when song is downvoted below -5', async () => {
-    jest.spyOn(songRepository, 'findSongById').mockImplementationOnce(() => [
-      {
-        id: 1,
-        name: 'test',
-        youtubeLink: 'test',
-        score: -5,
-      },
-    ]);
+    jest.spyOn(songRepository, 'findSongById').mockImplementationOnce(() => ({
+      id: 1,
+      name: 'test',
+      youtubeLink: 'test',
+      score: -5,
+    }));
 
-    jest.spyOn(songRepository, 'deleteSong').mockImplementationOnce(() => []);
+    jest.spyOn(songRepository, 'deleteSong').mockImplementationOnce(() => ({}));
 
     const result = await songService.voteForSong({
       id: 1,
       voteType: 'downvote',
     });
 
-    expect(result.length).toBe(0);
+    expect(result).toEqual({});
   });
 
   test('Should return a song with a score of -5', async () => {
-    jest.spyOn(songRepository, 'findSongById').mockImplementationOnce(() => [
-      {
-        id: 1,
-        name: 'test',
-        youtubeLink: 'test',
-        score: -4,
-      },
-    ]);
+    jest.spyOn(songRepository, 'findSongById').mockImplementationOnce(() => ({
+      id: 1,
+      name: 'test',
+      youtubeLink: 'test',
+      score: -4,
+    }));
 
-    jest.spyOn(songRepository, 'updateSong').mockImplementationOnce(() => [
-      {
-        id: 1,
-        name: 'test',
-        youtubeLink: 'test',
-        score: -5,
-      },
-    ]);
+    jest.spyOn(songRepository, 'updateSong').mockImplementationOnce(() => ({
+      id: 1,
+      name: 'test',
+      youtubeLink: 'test',
+      score: -5,
+    }));
 
     const result = await songService.voteForSong({
       id: 1,
       voteType: 'downvote',
     });
 
-    expect(result.length).toBe(1);
-    expect(result[0].score).toBe(-5);
+    expect(result).toEqual({
+      id: 1,
+      name: 'test',
+      youtubeLink: 'test',
+      score: -5,
+    });
   });
 
   test('Should return a song with a score of -4', async () => {
-    jest.spyOn(songRepository, 'findSongById').mockImplementationOnce(() => [
-      {
-        id: 1,
-        name: 'test',
-        youtubeLink: 'test',
-        score: -3,
-      },
-    ]);
+    jest.spyOn(songRepository, 'findSongById').mockImplementationOnce(() => ({
+      id: 1,
+      name: 'test',
+      youtubeLink: 'test',
+      score: -3,
+    }));
 
-    jest.spyOn(songRepository, 'updateSong').mockImplementationOnce(() => [
-      {
-        id: 1,
-        name: 'test',
-        youtubeLink: 'test',
-        score: -4,
-      },
-    ]);
+    jest.spyOn(songRepository, 'updateSong').mockImplementationOnce(() => ({
+      id: 1,
+      name: 'test',
+      youtubeLink: 'test',
+      score: -4,
+    }));
 
     const result = await songService.voteForSong({
       id: 1,
       voteType: 'downvote',
     });
 
-    expect(result.length).toBe(1);
-    expect(result[0].score).toBe(-4);
+    expect(result).toEqual({
+      id: 1,
+      name: 'test',
+      youtubeLink: 'test',
+      score: -4,
+    });
   });
 });

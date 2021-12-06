@@ -43,14 +43,26 @@ const updateSong = async ({ id, newScore }) => {
 };
 
 const deleteSong = async ({ id }) => {
-  const result = await connection.query(
-    'DELETE FROM song WHERE id = $1',
-    [id],
-  );
+  const result = await connection.query('DELETE FROM song WHERE id = $1', [id]);
 
   return result.rows[0];
 };
 
+const selectTopSongs = async ({ amount }) => {
+  const result = await connection.query(
+    'SELECT * FROM song ORDER BY score DESC LIMIT $1;',
+    [amount],
+  );
+
+  return result.rows;
+};
+
 export {
-  insertSong, findSongByName, findSongByLink, findSongById, updateSong, deleteSong,
+  insertSong,
+  findSongByName,
+  findSongByLink,
+  findSongById,
+  updateSong,
+  deleteSong,
+  selectTopSongs,
 };
