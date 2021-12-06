@@ -217,4 +217,46 @@ describe('Song Service', () => {
       },
     ]);
   });
+
+  test('Should throw a SongError when there are no songs available', async () => {
+    jest
+      .spyOn(songRepository, 'selectAllSongs')
+      .mockImplementationOnce(() => []);
+
+    const promise = songService.randomSong();
+    await expect(promise).rejects.toThrowError(SongError);
+  });
+
+  test('Should return a song with score above 10', async () => {
+    jest.spyOn(songRepository, 'selectAllSongs').mockImplementationOnce(() => [
+      {
+        id: 2,
+        name: 'test1',
+        youtubeLink: 'test1',
+        score: 11,
+      },
+      {
+        id: 3,
+        name: 'test3',
+        youtubeLink: 'test3',
+        score: 12,
+      },
+      {
+        id: 1,
+        name: 'test2',
+        youtubeLink: 'test2',
+        score: 13,
+      },
+    ]);
+
+    const result = await songService.randomSong();
+    expect(result).toEqual(
+      expect.objectContaining({
+        id: expect.any(Number),
+        name: expect.any(String),
+        youtubeLink: expect.any(String),
+        score: expect.any(Number),
+      }),
+    );
+  });
 });
