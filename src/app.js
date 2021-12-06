@@ -9,7 +9,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-app.use(recommendationRouter);
+app.use('/recommendations', recommendationRouter);
 
 app.use(serverMiddlewareError);
 
