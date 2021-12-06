@@ -278,4 +278,85 @@ describe('Song Service', () => {
     const result = await songService.randomSong();
     expect(result.score).toBeLessThanOrEqual(10);
   });
+
+  test('Should return a song with score above 10 when chances are below 70%', async () => {
+    jest.spyOn(Math, 'random').mockReturnValue(0.699);
+    jest.spyOn(songRepository, 'selectAllSongs').mockImplementationOnce(() => [
+      {
+        id: 2,
+        name: 'test1',
+        youtubeLink: 'test1',
+        score: 8,
+      },
+      {
+        id: 3,
+        name: 'test3',
+        youtubeLink: 'test3',
+        score: 12,
+      },
+      {
+        id: 1,
+        name: 'test2',
+        youtubeLink: 'test2',
+        score: 13,
+      },
+    ]);
+
+    const result = await songService.randomSong();
+    expect(result.score).toBeGreaterThan(10);
+  });
+
+  test('Should return a song with score above 10 when chances are exactly 70%', async () => {
+    jest.spyOn(Math, 'random').mockReturnValue(0.7);
+    jest.spyOn(songRepository, 'selectAllSongs').mockImplementationOnce(() => [
+      {
+        id: 2,
+        name: 'test1',
+        youtubeLink: 'test1',
+        score: 8,
+      },
+      {
+        id: 3,
+        name: 'test3',
+        youtubeLink: 'test3',
+        score: 12,
+      },
+      {
+        id: 1,
+        name: 'test2',
+        youtubeLink: 'test2',
+        score: 13,
+      },
+    ]);
+
+    const result = await songService.randomSong();
+    expect(result.score).toBeGreaterThan(10);
+  });
+
+  test('Should return a song with score below or equal 10 when chances are below 30%', async () => {
+    jest.spyOn(Math, 'random').mockReturnValue(0.701);
+    jest.spyOn(songRepository, 'selectAllSongs').mockImplementationOnce(() => [
+      {
+        id: 2,
+        name: 'test1',
+        youtubeLink: 'test1',
+        score: 8,
+      },
+      {
+        id: 3,
+        name: 'test3',
+        youtubeLink: 'test3',
+        score: 12,
+      },
+      {
+        id: 1,
+        name: 'test2',
+        youtubeLink: 'test2',
+        score: -3,
+      },
+    ]);
+
+    const result = await songService.randomSong();
+    expect(result.score).toBeLessThanOrEqual(10);
+  });
 });
