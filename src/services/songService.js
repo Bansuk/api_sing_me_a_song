@@ -1,5 +1,6 @@
 import * as songRepository from '../repositories/songRepository.js';
 import SongError from '../errors/SongError.js';
+import * as songServiceHelper from '../helpers/songServiceHelper.js';
 
 const createSong = async ({ name, youtubeLink }) => {
   const isNameInUse = await songRepository.findSongByName(name);
@@ -45,4 +46,29 @@ const topSongs = async ({ amount }) => {
   return songs;
 };
 
-export { createSong, voteForSong, topSongs };
+const randomSong = async () => {
+  const songs = await songRepository.selectAllSongs();
+
+  if (!songs.length) throw new SongError('There are no songs available.');
+
+  if (songs.every((song) => song.score > 10) || songs.every((song) => song.score <= 10)) {
+    const randomNumber = songServiceHelper.getRandomInt(0, songs.length);
+    return songs[randomNumber];
+  }
+
+  const songsWithScoreAbove10 = songs.filter((song) => song.score > 10);
+  const songsWithScoreBelowOrEqual10 = songs.filter((song) => song.score <= 10);
+  const randomPercentage = songServiceHelper.getRandomArbitrary(0, 1);
+
+  if (randomPercentage <= 0.7) {
+    const randomNumber = songServiceHelper.getRandomInt(0, songsWithScoreAbove10.length);
+    return songsWithScoreAbove10[randomNumber];
+  }
+
+  const randomNumber = songServiceHelper.getRandomInt(0, songsWithScoreBelowOrEqual10.length);
+  return songsWithScoreBelowOrEqual10[randomNumber];
+};
+
+export {
+  createSong, voteForSong, topSongs, randomSong,
+};

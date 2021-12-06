@@ -41,4 +41,16 @@ const getTopSongs = async (req, res, next) => {
   }
 };
 
-export { newSong, newVote, getTopSongs };
+const getRandomSong = async (req, res, next) => {
+  try {
+    const randomSong = await songService.randomSong();
+    return res.status(200).send(randomSong);
+  } catch (error) {
+    if (error instanceof SongError) return res.status(404).send(error.message);
+    next(error);
+  }
+};
+
+export {
+  newSong, newVote, getTopSongs, getRandomSong,
+};
