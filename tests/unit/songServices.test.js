@@ -227,7 +227,7 @@ describe('Song Service', () => {
     await expect(promise).rejects.toThrowError(SongError);
   });
 
-  test('Should return a song with score above 10', async () => {
+  test('Should return a song with score above 10 when there are only songs with a score higher than 10', async () => {
     jest.spyOn(songRepository, 'selectAllSongs').mockImplementationOnce(() => [
       {
         id: 2,
@@ -251,5 +251,31 @@ describe('Song Service', () => {
 
     const result = await songService.randomSong();
     expect(result.score).toBeGreaterThan(10);
+  });
+
+  test('Should return a song with score below or equal to 10 when there are only songs with a score of 10 or lower', async () => {
+    jest.spyOn(songRepository, 'selectAllSongs').mockImplementationOnce(() => [
+      {
+        id: 2,
+        name: 'test1',
+        youtubeLink: 'test1',
+        score: 1,
+      },
+      {
+        id: 3,
+        name: 'test3',
+        youtubeLink: 'test3',
+        score: 4,
+      },
+      {
+        id: 1,
+        name: 'test2',
+        youtubeLink: 'test2',
+        score: 10,
+      },
+    ]);
+
+    const result = await songService.randomSong();
+    expect(result.score).toBeLessThanOrEqual(10);
   });
 });
