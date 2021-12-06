@@ -250,13 +250,6 @@ describe('Song Service', () => {
     ]);
 
     const result = await songService.randomSong();
-    expect(result).toEqual(
-      expect.objectContaining({
-        id: expect.any(Number),
-        name: expect.any(String),
-        youtubeLink: expect.any(String),
-        score: expect.any(Number),
-      }),
-    );
+    expect(result.score).toBeGreaterThan(10);
   });
 });
