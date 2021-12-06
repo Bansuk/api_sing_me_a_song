@@ -57,6 +57,12 @@ const selectTopSongs = async ({ amount }) => {
   return result.rows;
 };
 
+const selectAllSongs = async () => {
+  const result = await connection.query('SELECT * FROM song');
+
+  return result.rows;
+};
+
 export {
   insertSong,
   findSongByName,
@@ -65,4 +71,5 @@ export {
   updateSong,
   deleteSong,
   selectTopSongs,
+  selectAllSongs,
 };
