@@ -170,4 +170,51 @@ describe('Song Service', () => {
     const promise = songService.topSongs({ amount: 100 });
     await expect(promise).rejects.toThrowError(SongError);
   });
+
+  test('Should return 3 in descending order of score', async () => {
+    jest.spyOn(songRepository, 'selectTopSongs').mockImplementationOnce(() => [
+      {
+        id: 2,
+        name: 'test1',
+        youtubeLink: 'test1',
+        score: 5,
+      },
+      {
+        id: 1,
+        name: 'test2',
+        youtubeLink: 'test2',
+        score: 4,
+      },
+      {
+        id: 3,
+        name: 'test3',
+        youtubeLink: 'test3',
+        score: 3,
+      },
+    ]);
+
+    const result = await songService.topSongs({ amount: 3 });
+
+    expect(result.length).toBe(3);
+    expect(result).toEqual([
+      {
+        id: 2,
+        name: 'test1',
+        youtubeLink: 'test1',
+        score: 5,
+      },
+      {
+        id: 1,
+        name: 'test2',
+        youtubeLink: 'test2',
+        score: 4,
+      },
+      {
+        id: 3,
+        name: 'test3',
+        youtubeLink: 'test3',
+        score: 3,
+      },
+    ]);
+  });
 });
